@@ -1,0 +1,181 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Hero from '../components/Hero.astro';
+import ListingCard from '../components/ListingCard.astro';
+import AreaCard from '../components/AreaCard.astro';
+import FeatureCard from '../components/FeatureCard.astro';
+import TestimonialCard from '../components/TestimonialCard.astro';
+import ContactCTA from '../components/ContactCTA.astro';
+import Footer from '../components/Footer.astro';
+
+// Featured listings data
+const listings = [
+  {
+    id: 1,
+    title: "Modern Studio in BGC",
+    location: "Bonifacio Global City, Taguig",
+    price: "₱25,000",
+    beds: "Studio",
+    baths: 1,
+    area: "28 sqm",
+    image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&h=400&fit=crop",
+    tag: "Available Now"
+  },
+  {
+    id: 2,
+    title: "1BR with Makati Skyline View",
+    location: "Salcedo Village, Makati",
+    price: "₱35,000",
+    beds: "1 Bed",
+    baths: 1,
+    area: "45 sqm",
+    image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&h=400&fit=crop",
+    tag: "Premium"
+  },
+  {
+    id: 3,
+    title: "Cozy 2BR near Ortigas CBD",
+    location: "Capitol Commons, Pasig",
+    price: "₱40,000",
+    beds: "2 Beds",
+    baths: 1,
+    area: "56 sqm",
+    image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=400&fit=crop",
+    tag: "Pet Friendly"
+  }
+];
+
+// Areas data
+const areas = [
+  { name: "BGC", count: 45, image: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=400&h=300&fit=crop" },
+  { name: "Makati", count: 62, image: "https://images.unsplash.com/photo-1562601579-599dec564e06?w=400&h=300&fit=crop" },
+  { name: "Ortigas", count: 38, image: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=400&h=300&fit=crop" },
+  { name: "Mandaluyong", count: 29, image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400&h=300&fit=crop" }
+];
+
+// Features data
+const features = [
+  {
+    icon: "shield",
+    title: "Verified Listings",
+    description: "Every property is personally inspected. What you see is what you get."
+  },
+  {
+    icon: "calendar",
+    title: "Flexible Terms",
+    description: "6-month and 1-year contracts available. Perfect for your career plans."
+  },
+  {
+    icon: "heart",
+    title: "Zero Broker Fees",
+    description: "Tenants pay nothing. We're compensated by property owners."
+  }
+];
+
+// Testimonials data
+const testimonials = [
+  {
+    name: "Maria Santos",
+    role: "Marketing Manager",
+    text: "Found my perfect 1BR in Makati within a week. The team was super responsive and understood exactly what I needed for my budget.",
+    rating: 5
+  },
+  {
+    name: "James Rodriguez",
+    role: "Software Developer",
+    text: "As someone relocating from Cebu, having a reliable broker made all the difference. Highly recommend for hassle-free condo hunting!",
+    rating: 5
+  }
+];
+---
+
+<Layout>
+  <Navbar />
+
+  <main>
+    <!-- Hero Section -->
+    <Hero />
+
+    <!-- Featured Listings Section -->
+    <section id="listings" class="py-16 px-4 bg-white">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
+          <div>
+            <h2 class="text-3xl font-bold text-gray-900 mb-2">Featured Listings</h2>
+            <p class="text-gray-600">Hand-picked condos ready for move-in</p>
+          </div>
+          <a
+            href="#"
+            class="text-blue-600 font-medium hover:text-blue-700 mt-4 md:mt-0 group inline-flex items-center gap-1"
+          >
+            View all listings
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform">
+              <path d="M5 12h14"></path>
+              <path d="m12 5 7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {listings.map((listing) => (
+            <ListingCard {...listing} />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Areas Section -->
+    <section id="areas" class="py-16 px-4 bg-slate-50">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-10">
+          <h2 class="text-3xl font-bold text-gray-900 mb-2">Explore by Area</h2>
+          <p class="text-gray-600">Find condos in Metro Manila's top business districts</p>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {areas.map((area) => (
+            <AreaCard {...area} />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section id="about" class="py-16 px-4 bg-white">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-900 mb-2">Why Choose MetroNest?</h2>
+          <p class="text-gray-600">We make condo hunting stress-free for busy professionals</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {features.map((feature) => (
+            <FeatureCard {...feature} />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-16 px-4 bg-slate-50">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-10">
+          <h2 class="text-3xl font-bold text-gray-900 mb-2">What Our Clients Say</h2>
+          <p class="text-gray-600">Real experiences from real tenants</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          {testimonials.map((testimonial) => (
+            <TestimonialCard {...testimonial} />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact CTA Section -->
+    <ContactCTA />
+  </main>
+
+  <Footer />
+</Layout>

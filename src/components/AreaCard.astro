@@ -1,0 +1,34 @@
+---
+interface Props {
+  name: string;
+  count: number;
+  image: string;
+}
+
+const { name, count, image } = Astro.props;
+---
+
+<a href="#" class="group relative rounded-2xl overflow-hidden cursor-pointer block">
+  <img
+    src={image}
+    alt={name}
+    class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+    loading="lazy"
+  />
+  <!-- Gradient overlay -->
+  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+
+  <!-- Content -->
+  <div class="absolute bottom-4 left-4 text-white">
+    <h3 class="font-semibold text-lg group-hover:text-blue-200 transition-colors">{name}</h3>
+    <p class="text-white/80 text-sm">{count} listings</p>
+  </div>
+
+  <!-- Hover indicator -->
+  <div class="absolute top-4 right-4 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
+      <path d="M5 12h14"></path>
+      <path d="m12 5 7 7-7 7"></path>
+    </svg>
+  </div>
+</a>
