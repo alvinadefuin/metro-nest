@@ -8,51 +8,10 @@ import FeatureCard from '../components/FeatureCard.astro';
 import TestimonialCard from '../components/TestimonialCard.astro';
 import ContactCTA from '../components/ContactCTA.astro';
 import Footer from '../components/Footer.astro';
+import { listings, areas } from '../data/listings';
 
-// Featured listings data
-const listings = [
-  {
-    id: 1,
-    title: "Modern Studio in BGC",
-    location: "Bonifacio Global City, Taguig",
-    price: "₱25,000",
-    beds: "Studio",
-    baths: 1,
-    area: "28 sqm",
-    image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&h=400&fit=crop",
-    tag: "Available Now"
-  },
-  {
-    id: 2,
-    title: "1BR with Makati Skyline View",
-    location: "Salcedo Village, Makati",
-    price: "₱35,000",
-    beds: "1 Bed",
-    baths: 1,
-    area: "45 sqm",
-    image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&h=400&fit=crop",
-    tag: "Premium"
-  },
-  {
-    id: 3,
-    title: "Cozy 2BR near Ortigas CBD",
-    location: "Capitol Commons, Pasig",
-    price: "₱40,000",
-    beds: "2 Beds",
-    baths: 1,
-    area: "56 sqm",
-    image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=400&fit=crop",
-    tag: "Pet Friendly"
-  }
-];
-
-// Areas data
-const areas = [
-  { name: "BGC", count: 45, image: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=400&h=300&fit=crop" },
-  { name: "Makati", count: 62, image: "https://images.unsplash.com/photo-1562601579-599dec564e06?w=400&h=300&fit=crop" },
-  { name: "Ortigas", count: 38, image: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=400&h=300&fit=crop" },
-  { name: "Mandaluyong", count: 29, image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400&h=300&fit=crop" }
-];
+// Get first 3 listings for featured section
+const featuredListings = listings.slice(0, 3);
 
 // Features data
 const features = [
@@ -106,7 +65,7 @@ const testimonials = [
             <p class="text-gray-600">Hand-picked condos ready for move-in</p>
           </div>
           <a
-            href="#"
+            href="/listings"
             class="text-blue-600 font-medium hover:text-blue-700 mt-4 md:mt-0 group inline-flex items-center gap-1"
           >
             View all listings
@@ -118,8 +77,18 @@ const testimonials = [
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {listings.map((listing) => (
-            <ListingCard {...listing} />
+          {featuredListings.map((listing) => (
+            <ListingCard
+              title={listing.title}
+              location={listing.location}
+              price={listing.price}
+              beds={listing.beds}
+              baths={listing.baths}
+              area={listing.sqm}
+              image={listing.image}
+              tag={listing.tag}
+              href={`/listings/${listing.id}`}
+            />
           ))}
         </div>
       </div>
@@ -135,7 +104,12 @@ const testimonials = [
 
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {areas.map((area) => (
-            <AreaCard {...area} />
+            <AreaCard
+              name={area.name}
+              count={area.count}
+              image={area.image}
+              slug={area.slug}
+            />
           ))}
         </div>
       </div>

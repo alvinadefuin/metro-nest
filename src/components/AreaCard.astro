@@ -3,12 +3,14 @@ interface Props {
   name: string;
   count: number;
   image: string;
+  slug?: string;
 }
 
-const { name, count, image } = Astro.props;
+const { name, count, image, slug } = Astro.props;
+const href = slug ? `/areas/${slug}` : '#';
 ---
 
-<a href="#" class="group relative rounded-2xl overflow-hidden cursor-pointer block">
+<a href={href} class="group relative rounded-2xl overflow-hidden cursor-pointer block">
   <img
     src={image}
     alt={name}

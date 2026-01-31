@@ -1,0 +1,298 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+import { listings, getListingById } from '../../data/listings';
+
+export function getStaticPaths() {
+  return listings.map((listing) => ({
+    params: { id: listing.id.toString() },
+    props: { listing }
+  }));
+}
+
+const { listing } = Astro.props;
+
+if (!listing) {
+  return Astro.redirect('/listings');
+}
+---
+
+<Layout title={`${listing.title} - MetroNest`} description={listing.description}>
+  <Navbar />
+
+  <main class="pt-20">
+    <!-- Breadcrumb -->
+    <div class="bg-gray-50 py-3 px-4 border-b border-gray-100">
+      <div class="max-w-7xl mx-auto">
+        <nav class="flex items-center gap-2 text-sm">
+          <a href="/" class="text-gray-500 hover:text-blue-600">Home</a>
+          <span class="text-gray-300">/</span>
+          <a href="/listings" class="text-gray-500 hover:text-blue-600">Listings</a>
+          <span class="text-gray-300">/</span>
+          <span class="text-gray-900">{listing.title}</span>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Image Gallery -->
+    <section class="bg-gray-100">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-1">
+          <div class="aspect-[4/3] md:aspect-auto md:row-span-2">
+            <img
+              src={listing.images[0]}
+              alt={listing.title}
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="hidden md:block aspect-[4/3]">
+            <img
+              src={listing.images[1]}
+              alt={listing.title}
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="hidden md:block aspect-[4/3]">
+            <img
+              src={listing.images[2]}
+              alt={listing.title}
+              class="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Listing Details -->
+    <section class="py-8 px-4">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Main Content -->
+          <div class="lg:col-span-2">
+            <!-- Header -->
+            <div class="mb-6">
+              {listing.tag && (
+                <span class="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium mb-3">
+                  {listing.tag}
+                </span>
+              )}
+              <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">{listing.title}</h1>
+              <div class="flex items-center gap-1 text-gray-600">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span>{listing.location}</span>
+              </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="flex flex-wrap gap-6 py-6 border-y border-gray-100 mb-6">
+              <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                  <path d="M2 4v16"></path>
+                  <path d="M2 8h18a2 2 0 0 1 2 2v10"></path>
+                  <path d="M2 17h20"></path>
+                  <path d="M6 8v9"></path>
+                </svg>
+                <span class="text-gray-900 font-medium">{listing.beds}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                  <path d="M9 6 6.5 3.5a1.5 1.5 0 0 0-1-.5C4.683 3 4 3.683 4 4.5V17a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"></path>
+                  <line x1="10" x2="8" y1="5" y2="7"></line>
+                  <line x1="2" x2="22" y1="12" y2="12"></line>
+                  <line x1="7" x2="7" y1="19" y2="21"></line>
+                  <line x1="17" x2="17" y1="19" y2="21"></line>
+                </svg>
+                <span class="text-gray-900 font-medium">{listing.baths} Bath</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                  <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+                </svg>
+                <span class="text-gray-900 font-medium">{listing.sqm}</span>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-8">
+              <h2 class="text-lg font-semibold text-gray-900 mb-3">About this property</h2>
+              <p class="text-gray-600 leading-relaxed">{listing.description}</p>
+            </div>
+
+            <!-- Features -->
+            <div class="mb-8">
+              <h2 class="text-lg font-semibold text-gray-900 mb-3">Features</h2>
+              <div class="grid grid-cols-2 gap-3">
+                {listing.features.map((feature) => (
+                  <div class="flex items-center gap-2 text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    {feature}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <!-- Amenities -->
+            <div class="mb-8">
+              <h2 class="text-lg font-semibold text-gray-900 mb-3">Building Amenities</h2>
+              <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {listing.amenities.map((amenity) => (
+                  <div class="flex items-center gap-2 text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-500">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    {amenity}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <!-- Sidebar -->
+          <div class="lg:col-span-1">
+            <div class="bg-white border border-gray-200 rounded-2xl p-6 sticky top-24 shadow-sm">
+              <!-- Price -->
+              <div class="mb-6">
+                <div class="text-3xl font-bold text-blue-600">{listing.price}</div>
+                <div class="text-gray-500">{listing.period}</div>
+              </div>
+
+              <!-- Contact Form -->
+              <form id="inquiry-form" class="space-y-4" action="https://api.web3forms.com/submit" method="POST">
+                <!-- Web3Forms Access Key - Replace with your own from https://web3forms.com -->
+                <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE" />
+                <input type="hidden" name="subject" value={`Inquiry: ${listing.title}`} />
+                <input type="hidden" name="from_name" value="MetroNest Property Inquiry" />
+                <input type="checkbox" name="botcheck" class="hidden" />
+                <input type="hidden" name="listing_id" value={listing.id} />
+                <input type="hidden" name="listing_title" value={listing.title} />
+
+                <div>
+                  <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Your name"
+                  />
+                </div>
+
+                <div>
+                  <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="your@email.com"
+                  />
+                </div>
+
+                <div>
+                  <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="+63 917 123 4567"
+                  />
+                </div>
+
+                <div>
+                  <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows="3"
+                    class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                    placeholder="I'm interested in this property..."
+                  ></textarea>
+                </div>
+
+                <button
+                  type="submit"
+                  class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition-all hover:shadow-lg"
+                >
+                  Schedule a Viewing
+                </button>
+              </form>
+
+              <div class="mt-4 text-center">
+                <a href="tel:+639171234567" class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                  Or call us: +63 917 123 4567
+                </a>
+              </div>
+
+              <!-- Success Message -->
+              <div id="inquiry-success" class="hidden text-center py-6">
+                <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">Inquiry Sent!</h3>
+                <p class="text-gray-600 text-sm">We'll get back to you within 24 hours.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <ContactCTA />
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  const form = document.getElementById('inquiry-form') as HTMLFormElement;
+  const successMessage = document.getElementById('inquiry-success');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    const originalText = submitBtn?.textContent;
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+    }
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        form.classList.add('hidden');
+        successMessage?.classList.remove('hidden');
+      } else {
+        alert('Something went wrong. Please try again.');
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        }
+      }
+    } catch (error) {
+      alert('Something went wrong. Please try again.');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    }
+  });
+</script>

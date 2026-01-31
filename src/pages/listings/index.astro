@@ -1,0 +1,174 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import ListingCard from '../../components/ListingCard.astro';
+import Footer from '../../components/Footer.astro';
+import { listings, areas } from '../../data/listings';
+---
+
+<Layout title="All Listings - MetroNest" description="Browse all available condo rentals in Metro Manila">
+  <Navbar />
+
+  <main class="pt-20">
+    <!-- Page Header -->
+    <section class="bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 py-12 px-4">
+      <div class="max-w-7xl mx-auto">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">All Listings</h1>
+        <p class="text-gray-600">Browse {listings.length} available condos in Metro Manila</p>
+      </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="border-b border-gray-100 py-4 px-4 bg-white sticky top-16 z-40">
+      <div class="max-w-7xl mx-auto">
+        <form class="flex flex-wrap gap-4 items-center">
+          <select
+            name="area"
+            id="filter-area"
+            class="px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">All Areas</option>
+            {areas.map((area) => (
+              <option value={area.slug}>{area.name}</option>
+            ))}
+          </select>
+
+          <select
+            name="type"
+            id="filter-type"
+            class="px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">All Types</option>
+            <option value="studio">Studio</option>
+            <option value="1bed">1 Bedroom</option>
+            <option value="2bed">2 Bedrooms</option>
+          </select>
+
+          <select
+            name="sort"
+            id="filter-sort"
+            class="px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Sort by: Default</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+          </select>
+
+          <button
+            type="button"
+            id="clear-filters"
+            class="text-blue-600 hover:text-blue-700 text-sm font-medium"
+          >
+            Clear filters
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Listings Grid -->
+    <section class="py-12 px-4 bg-white">
+      <div class="max-w-7xl mx-auto">
+        <div id="listings-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {listings.map((listing) => {
+            const priceNum = parseInt(listing.price.replace(/[₱,]/g, ''));
+            const bedsType = listing.beds.toLowerCase().includes('studio') ? 'studio' : listing.beds.includes('1') ? '1bed' : '2bed';
+            return (
+              <div data-area={listing.area} data-beds={bedsType} data-price={priceNum}>
+                <ListingCard
+                  title={listing.title}
+                  location={listing.location}
+                  price={listing.price}
+                  beds={listing.beds}
+                  baths={listing.baths}
+                  area={listing.sqm}
+                  image={listing.image}
+                  tag={listing.tag}
+                  href={`/listings/${listing.id}`}
+                />
+              </div>
+            );
+          })}
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden text-center py-12">
+          <div class="text-gray-400 mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.3-4.3"></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">No listings found</h3>
+          <p class="text-gray-600">Try adjusting your filters to find more options.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  const areaFilter = document.getElementById('filter-area') as HTMLSelectElement;
+  const typeFilter = document.getElementById('filter-type') as HTMLSelectElement;
+  const sortFilter = document.getElementById('filter-sort') as HTMLSelectElement;
+  const clearBtn = document.getElementById('clear-filters');
+  const grid = document.getElementById('listings-grid');
+  const emptyState = document.getElementById('empty-state');
+
+  function filterAndSortListings() {
+    const area = areaFilter?.value || '';
+    const type = typeFilter?.value || '';
+    const sort = sortFilter?.value || '';
+    const items = Array.from(grid?.querySelectorAll('[data-area]') || []) as HTMLElement[];
+    let visibleCount = 0;
+
+    // First, filter items
+    items.forEach((el) => {
+      const matchesArea = !area || el.dataset.area === area;
+      const matchesType = !type || el.dataset.beds === type;
+
+      if (matchesArea && matchesType) {
+        el.style.display = '';
+        visibleCount++;
+      } else {
+        el.style.display = 'none';
+      }
+    });
+
+    // Then, sort visible items
+    if (sort && grid) {
+      const visibleItems = items.filter(el => el.style.display !== 'none');
+
+      visibleItems.sort((a, b) => {
+        const priceA = parseInt(a.dataset.price || '0');
+        const priceB = parseInt(b.dataset.price || '0');
+
+        if (sort === 'price-low') {
+          return priceA - priceB;
+        } else if (sort === 'price-high') {
+          return priceB - priceA;
+        }
+        return 0;
+      });
+
+      // Re-append in sorted order
+      visibleItems.forEach(el => grid.appendChild(el));
+    }
+
+    if (emptyState) {
+      emptyState.classList.toggle('hidden', visibleCount > 0);
+    }
+  }
+
+  areaFilter?.addEventListener('change', filterAndSortListings);
+  typeFilter?.addEventListener('change', filterAndSortListings);
+  sortFilter?.addEventListener('change', filterAndSortListings);
+
+  clearBtn?.addEventListener('click', () => {
+    if (areaFilter) areaFilter.value = '';
+    if (typeFilter) typeFilter.value = '';
+    if (sortFilter) sortFilter.value = '';
+    filterAndSortListings();
+  });
+</script>

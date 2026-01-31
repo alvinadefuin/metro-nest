@@ -92,3 +92,22 @@ Currently, listing/area/testimonial data is hardcoded in `src/pages/index.astro`
 ## Images
 
 Using Unsplash placeholder images. Replace with actual property photos for production.
+
+## Form Submissions (Web3Forms)
+
+All forms use [Web3Forms](https://web3forms.com) for free form submissions.
+
+### Setup
+1. Go to https://web3forms.com
+2. Enter your email to get an access key
+3. Replace `YOUR_ACCESS_KEY_HERE` in these files:
+   - `src/components/ContactCTA.astro`
+   - `src/pages/contact.astro`
+   - `src/pages/list-property.astro`
+   - `src/pages/listings/[id].astro`
+
+### Forms
+- **Contact CTA** - Quick inquiry form on homepage
+- **Contact Page** - Full contact form with subject selection
+- **List Property** - Property owner submission form
+- **Listing Inquiry** - Per-listing inquiry form

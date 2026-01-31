@@ -9,6 +9,7 @@ interface Props {
   area: string;
   image: string;
   tag?: string;
+  href?: string;
 }
 
 const {
@@ -20,7 +21,8 @@ const {
   baths,
   area,
   image,
-  tag
+  tag,
+  href = "#"
 } = Astro.props;
 ---
 
@@ -104,7 +106,7 @@ const {
         <span class="text-gray-500 text-sm">{period}</span>
       </div>
       <a
-        href="#"
+        href={href}
         class="text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors hover:underline"
       >
         View Details
