@@ -100,11 +100,11 @@ All forms use [Web3Forms](https://web3forms.com) for free form submissions.
 ### Setup
 1. Go to https://web3forms.com
 2. Enter your email to get an access key
-3. Replace `YOUR_ACCESS_KEY_HERE` in these files:
-   - `src/components/ContactCTA.astro`
-   - `src/pages/contact.astro`
-   - `src/pages/list-property.astro`
-   - `src/pages/listings/[id].astro`
+3. Create a `.env` file in the project root:
+   ```
+   WEB3FORMS_ACCESS_KEY=your_actual_key_here
+   ```
+4. For Vercel deployment, add the environment variable in Project Settings > Environment Variables
 
 ### Forms
 - **Contact CTA** - Quick inquiry form on homepage

@@ -2,6 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+
+const WEB3FORMS_KEY = import.meta.env.WEB3FORMS_ACCESS_KEY;
 ---
 
 <Layout title="Contact Us - MetroNest" description="Get in touch with MetroNest. We're here to help you find your perfect condo in Metro Manila.">
@@ -101,8 +103,7 @@ import Footer from '../components/Footer.astro';
               <h2 class="text-xl font-bold text-gray-900 mb-6">Send us a Message</h2>
 
               <form id="contact-form" class="space-y-4" action="https://api.web3forms.com/submit" method="POST">
-                <!-- Web3Forms Access Key - Replace with your own from https://web3forms.com -->
-                <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE" />
+                <input type="hidden" name="access_key" value={WEB3FORMS_KEY} />
                 <input type="hidden" name="from_name" value="MetroNest Contact Form" />
                 <input type="checkbox" name="botcheck" class="hidden" />
 

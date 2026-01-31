@@ -13,6 +13,7 @@ export function getStaticPaths() {
 }
 
 const { listing } = Astro.props;
+const WEB3FORMS_KEY = import.meta.env.WEB3FORMS_ACCESS_KEY;
 
 if (!listing) {
   return Astro.redirect('/listings');
@@ -165,8 +166,7 @@ if (!listing) {
 
               <!-- Contact Form -->
               <form id="inquiry-form" class="space-y-4" action="https://api.web3forms.com/submit" method="POST">
-                <!-- Web3Forms Access Key - Replace with your own from https://web3forms.com -->
-                <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE" />
+                <input type="hidden" name="access_key" value={WEB3FORMS_KEY} />
                 <input type="hidden" name="subject" value={`Inquiry: ${listing.title}`} />
                 <input type="hidden" name="from_name" value="MetroNest Property Inquiry" />
                 <input type="checkbox" name="botcheck" class="hidden" />

@@ -2,6 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+
+const WEB3FORMS_KEY = import.meta.env.WEB3FORMS_ACCESS_KEY;
 ---
 
 <Layout title="List Your Property - MetroNest" description="List your condo for rent on MetroNest. Reach thousands of potential tenants in Metro Manila.">
@@ -64,8 +66,7 @@ import Footer from '../components/Footer.astro';
           <h2 class="text-xl font-bold text-gray-900 mb-6">Property Details</h2>
 
           <form id="list-property-form" class="space-y-6" action="https://api.web3forms.com/submit" method="POST">
-            <!-- Web3Forms Access Key - Replace with your own from https://web3forms.com -->
-            <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE" />
+            <input type="hidden" name="access_key" value={WEB3FORMS_KEY} />
             <input type="hidden" name="subject" value="New Property Listing Submission" />
             <input type="hidden" name="from_name" value="MetroNest Property Listing" />
             <input type="checkbox" name="botcheck" class="hidden" />
