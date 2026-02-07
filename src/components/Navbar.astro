@@ -7,13 +7,13 @@ const navLinks = [
 ];
 ---
 
-<nav class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100">
+<nav class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm z-50 border-b border-gray-100" role="navigation" aria-label="Main navigation">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16">
       <!-- Logo -->
-      <a href="/" class="flex items-center gap-2 group">
+      <a href="/" class="flex items-center gap-2 group focus-ring rounded-lg" aria-label="MetroNest Home">
         <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center transition-transform group-hover:scale-105">
-          <span class="text-white font-bold text-sm">M</span>
+          <span class="text-white font-bold text-sm" aria-hidden="true">M</span>
         </div>
         <span class="text-xl font-bold text-gray-900">MetroNest</span>
       </a>
@@ -23,14 +23,14 @@ const navLinks = [
         {navLinks.map((link) => (
           <a
             href={link.href}
-            class="text-gray-600 hover:text-blue-600 transition-colors text-sm font-medium"
+            class="text-gray-600 hover:text-blue-600 transition-colors text-sm font-medium focus-ring rounded px-1 py-1"
           >
             {link.label}
           </a>
         ))}
         <a
           href="/list-property"
-          class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full text-sm font-medium transition-all hover:shadow-lg hover:shadow-blue-500/25"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-full text-sm font-medium transition-all hover:shadow-lg hover:shadow-blue-500/25 focus-ring"
         >
           List Your Property
         </a>
@@ -39,51 +39,189 @@ const navLinks = [
       <!-- Mobile Menu Button -->
       <button
         id="mobile-menu-btn"
-        class="md:hidden p-2 text-gray-600 hover:text-gray-900 transition-colors"
-        aria-label="Toggle menu"
+        type="button"
+        class="md:hidden p-2.5 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors touch-target focus-ring"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg id="menu-icon-open" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <line x1="4" x2="20" y1="12" y2="12"></line>
           <line x1="4" x2="20" y1="6" y2="6"></line>
           <line x1="4" x2="20" y1="18" y2="18"></line>
+        </svg>
+        <svg id="menu-icon-close" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden" aria-hidden="true">
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
         </svg>
       </button>
     </div>
   </div>
 
   <!-- Mobile Menu -->
-  <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-gray-100 py-4 px-4">
-    <div class="flex flex-col gap-4">
-      {navLinks.map((link) => (
+  <div
+    id="mobile-menu"
+    class="md:hidden bg-white border-t border-gray-100 overflow-hidden transition-all duration-300 ease-out"
+    style="max-height: 0; opacity: 0;"
+    aria-hidden="true"
+  >
+    <div class="py-4 px-4 space-y-1">
+      {navLinks.map((link, index) => (
         <a
           href={link.href}
-          class="text-gray-600 hover:text-blue-600 py-2 transition-colors"
+          class="block text-gray-600 hover:text-blue-600 hover:bg-blue-50 py-3 px-4 rounded-xl transition-colors font-medium focus-ring"
+          tabindex="-1"
+          data-menu-item
         >
           {link.label}
         </a>
       ))}
-      <a
-        href="/list-property"
-        class="bg-blue-600 text-white px-5 py-2 rounded-full text-sm font-medium w-full text-center"
-      >
-        List Your Property
-      </a>
+      <div class="pt-3">
+        <a
+          href="/list-property"
+          class="block bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl text-sm font-medium text-center transition-colors focus-ring"
+          tabindex="-1"
+          data-menu-item
+        >
+          List Your Property
+        </a>
+      </div>
     </div>
   </div>
+
+  <!-- Overlay for mobile menu -->
+  <div
+    id="mobile-menu-overlay"
+    class="fixed inset-0 bg-black/20 backdrop-blur-sm z-[-1] opacity-0 pointer-events-none transition-opacity duration-300 md:hidden"
+    aria-hidden="true"
+  ></div>
 </nav>
 
 <script>
   const menuBtn = document.getElementById('mobile-menu-btn');
   const mobileMenu = document.getElementById('mobile-menu');
+  const overlay = document.getElementById('mobile-menu-overlay');
+  const iconOpen = document.getElementById('menu-icon-open');
+  const iconClose = document.getElementById('menu-icon-close');
+  const menuItems = mobileMenu?.querySelectorAll('[data-menu-item]') as NodeListOf<HTMLElement>;
 
-  menuBtn?.addEventListener('click', () => {
-    mobileMenu?.classList.toggle('hidden');
-  });
+  let isOpen = false;
+
+  function openMenu() {
+    isOpen = true;
+
+    // Update ARIA
+    menuBtn?.setAttribute('aria-expanded', 'true');
+    menuBtn?.setAttribute('aria-label', 'Close menu');
+    mobileMenu?.setAttribute('aria-hidden', 'false');
+
+    // Show menu with animation
+    if (mobileMenu) {
+      mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
+      mobileMenu.style.opacity = '1';
+    }
+
+    // Show overlay
+    if (overlay) {
+      overlay.style.opacity = '1';
+      overlay.style.pointerEvents = 'auto';
+    }
+
+    // Toggle icons
+    iconOpen?.classList.add('hidden');
+    iconClose?.classList.remove('hidden');
+
+    // Enable tabbing to menu items
+    menuItems?.forEach(item => item.setAttribute('tabindex', '0'));
+
+    // Focus first menu item
+    setTimeout(() => menuItems?.[0]?.focus(), 100);
+
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    isOpen = false;
+
+    // Update ARIA
+    menuBtn?.setAttribute('aria-expanded', 'false');
+    menuBtn?.setAttribute('aria-label', 'Open menu');
+    mobileMenu?.setAttribute('aria-hidden', 'true');
+
+    // Hide menu with animation
+    if (mobileMenu) {
+      mobileMenu.style.maxHeight = '0';
+      mobileMenu.style.opacity = '0';
+    }
+
+    // Hide overlay
+    if (overlay) {
+      overlay.style.opacity = '0';
+      overlay.style.pointerEvents = 'none';
+    }
+
+    // Toggle icons
+    iconOpen?.classList.remove('hidden');
+    iconClose?.classList.add('hidden');
+
+    // Disable tabbing to menu items
+    menuItems?.forEach(item => item.setAttribute('tabindex', '-1'));
+
+    // Restore body scroll
+    document.body.style.overflow = '';
+  }
+
+  function toggleMenu() {
+    if (isOpen) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  }
+
+  // Toggle on button click
+  menuBtn?.addEventListener('click', toggleMenu);
+
+  // Close on overlay click
+  overlay?.addEventListener('click', closeMenu);
 
   // Close menu when clicking a link
-  mobileMenu?.querySelectorAll('a').forEach(link => {
+  menuItems?.forEach(link => {
     link.addEventListener('click', () => {
-      mobileMenu?.classList.add('hidden');
+      closeMenu();
     });
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isOpen) {
+      closeMenu();
+      menuBtn?.focus();
+    }
+  });
+
+  // Handle focus trap within mobile menu
+  mobileMenu?.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab' && isOpen) {
+      const focusableItems = Array.from(menuItems || []);
+      const firstItem = focusableItems[0];
+      const lastItem = focusableItems[focusableItems.length - 1];
+
+      if (e.shiftKey && document.activeElement === firstItem) {
+        e.preventDefault();
+        lastItem?.focus();
+      } else if (!e.shiftKey && document.activeElement === lastItem) {
+        e.preventDefault();
+        firstItem?.focus();
+      }
+    }
+  });
+
+  // Close menu on resize to desktop
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 768 && isOpen) {
+      closeMenu();
+    }
   });
 </script>

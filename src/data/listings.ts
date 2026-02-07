@@ -146,12 +146,12 @@ export const listings: Listing[] = [
   }
 ];
 
-export const areas = [
+// Area data without counts - counts are computed dynamically
+const areaData = [
   {
     slug: "bgc",
     name: "BGC",
     fullName: "Bonifacio Global City, Taguig",
-    count: 45,
     image: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=400&h=300&fit=crop",
     description: "Metro Manila's premier business and lifestyle district featuring modern high-rises, international dining, and vibrant nightlife."
   },
@@ -159,7 +159,6 @@ export const areas = [
     slug: "makati",
     name: "Makati",
     fullName: "Makati City",
-    count: 62,
     image: "https://images.unsplash.com/photo-1562601579-599dec564e06?w=400&h=300&fit=crop",
     description: "The country's financial capital offering a perfect blend of business, shopping, and entertainment destinations."
   },
@@ -167,7 +166,6 @@ export const areas = [
     slug: "ortigas",
     name: "Ortigas",
     fullName: "Ortigas Center, Pasig",
-    count: 38,
     image: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=400&h=300&fit=crop",
     description: "A major business hub with excellent connectivity, shopping centers, and a growing residential community."
   },
@@ -175,11 +173,21 @@ export const areas = [
     slug: "mandaluyong",
     name: "Mandaluyong",
     fullName: "Mandaluyong City",
-    count: 29,
     image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400&h=300&fit=crop",
     description: "Strategic location between Makati and Ortigas with affordable options and excellent MRT access."
   }
 ];
+
+// Helper function to count listings per area
+function countListingsForArea(areaSlug: string): number {
+  return listings.filter(listing => listing.area === areaSlug).length;
+}
+
+// Export areas with dynamically computed counts
+export const areas = areaData.map(area => ({
+  ...area,
+  count: countListingsForArea(area.slug)
+}));
 
 export function getListingsByArea(areaSlug: string): Listing[] {
   return listings.filter(listing => listing.area === areaSlug);

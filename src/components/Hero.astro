@@ -2,29 +2,29 @@
 import SearchBox from './SearchBox.astro';
 ---
 
-<section class="pt-24 pb-16 px-4 bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 relative overflow-hidden">
+<section class="pt-20 sm:pt-24 pb-12 sm:pb-16 px-4 bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 relative overflow-hidden">
   <!-- Background decoration -->
-  <div class="absolute inset-0 overflow-hidden pointer-events-none">
-    <div class="absolute -top-40 -right-40 w-80 h-80 bg-blue-200/30 rounded-full blur-3xl"></div>
-    <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-100/40 rounded-full blur-3xl"></div>
+  <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+    <div class="absolute -top-40 -right-40 w-60 sm:w-80 h-60 sm:h-80 bg-blue-200/30 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-40 -left-40 w-60 sm:w-80 h-60 sm:h-80 bg-blue-100/40 rounded-full blur-3xl"></div>
   </div>
 
   <div class="max-w-7xl mx-auto relative">
-    <div class="text-center mb-10">
+    <div class="text-center mb-8 sm:mb-10">
       <!-- Trust badge -->
-      <div class="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-1.5 rounded-full text-sm font-medium mb-6">
-        <span class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
-        Trusted by 500+ tenants in Metro Manila
+      <div class="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium mb-4 sm:mb-6">
+        <span class="w-2 h-2 bg-blue-600 rounded-full animate-pulse" aria-hidden="true"></span>
+        <span>Trusted by 500+ tenants in Metro Manila</span>
       </div>
 
       <!-- Heading -->
-      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 leading-tight">
+      <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-3 sm:mb-4 leading-tight">
         Find Your Perfect
         <span class="text-blue-600 block">Condo in Manila</span>
       </h1>
 
       <!-- Subheading -->
-      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+      <p class="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-2">
         Flexible 6-month and 1-year leases for working professionals.
         Premium condos in BGC, Makati, and Ortigas.
       </p>
@@ -34,20 +34,25 @@ import SearchBox from './SearchBox.astro';
     <SearchBox />
 
     <!-- Stats -->
-    <div class="flex flex-wrap justify-center gap-8 mt-10 text-center">
-      <div class="group">
-        <div class="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">200+</div>
-        <div class="text-sm text-gray-500">Active Listings</div>
+    <div class="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-6 sm:gap-8 mt-8 sm:mt-10" role="list" aria-label="Company statistics">
+      <div class="group text-center" role="listitem">
+        <div class="text-xl sm:text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">200+</div>
+        <div class="text-xs sm:text-sm text-gray-500">Active Listings</div>
       </div>
-      <div class="w-px h-12 bg-gray-200 hidden sm:block"></div>
-      <div class="group">
-        <div class="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">500+</div>
-        <div class="text-sm text-gray-500">Happy Tenants</div>
+      <div class="w-16 h-px sm:w-px sm:h-10 bg-gray-200" aria-hidden="true"></div>
+      <div class="group text-center" role="listitem">
+        <div class="text-xl sm:text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">500+</div>
+        <div class="text-xs sm:text-sm text-gray-500">Happy Tenants</div>
       </div>
-      <div class="w-px h-12 bg-gray-200 hidden sm:block"></div>
-      <div class="group">
-        <div class="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">4.9</div>
-        <div class="text-sm text-gray-500">Rating</div>
+      <div class="w-16 h-px sm:w-px sm:h-10 bg-gray-200" aria-hidden="true"></div>
+      <div class="group text-center" role="listitem">
+        <div class="text-xl sm:text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors flex items-center justify-center gap-1">
+          <span>4.9</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-yellow-400" aria-hidden="true">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+        </div>
+        <div class="text-xs sm:text-sm text-gray-500">Average Rating</div>
       </div>
     </div>
   </div>

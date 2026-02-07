@@ -9,29 +9,41 @@ interface Props {
 const { name, role, text, rating } = Astro.props;
 ---
 
-<article class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
+<article class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100">
   <!-- Star Rating -->
-  <div class="flex gap-1 mb-4">
-    {Array.from({ length: rating }).map(() => (
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-400">
+  <div class="flex gap-0.5 sm:gap-1 mb-3 sm:mb-4" role="img" aria-label={`Rating: ${rating} out of 5 stars`}>
+    {Array.from({ length: 5 }).map((_, i) => (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill={i < rating ? "currentColor" : "none"}
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class={`${i < rating ? 'text-yellow-400' : 'text-gray-300'} sm:w-4 sm:h-4`}
+        aria-hidden="true"
+      >
         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
       </svg>
     ))}
   </div>
 
   <!-- Quote -->
-  <blockquote class="text-gray-600 mb-4 leading-relaxed">
-    "{text}"
+  <blockquote class="text-gray-600 mb-3 sm:mb-4 leading-relaxed text-sm sm:text-base">
+    <span aria-hidden="true">"</span>{text}<span aria-hidden="true">"</span>
   </blockquote>
 
   <!-- Author -->
-  <div class="flex items-center gap-3">
-    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
-      <span class="text-white font-medium text-sm">{name.charAt(0)}</span>
+  <footer class="flex items-center gap-3">
+    <div class="w-9 sm:w-10 h-9 sm:h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center" aria-hidden="true">
+      <span class="text-white font-medium text-xs sm:text-sm">{name.charAt(0)}</span>
     </div>
     <div>
-      <div class="font-semibold text-gray-900">{name}</div>
-      <div class="text-sm text-gray-500">{role}</div>
+      <cite class="font-semibold text-gray-900 not-italic text-sm sm:text-base">{name}</cite>
+      <div class="text-xs sm:text-sm text-gray-500">{role}</div>
     </div>
-  </div>
+  </footer>
 </article>
